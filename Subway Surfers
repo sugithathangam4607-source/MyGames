@@ -1,0 +1,98 @@
+# MyGames
+// Key game mechanics - movement and obstacle handling
+
+// Update obstacles position as they move toward camera
+for(i=0;i<12;i++)
+{
+    if(obstacle1[i].pos[2]>cameraz)
+        obstacle1[i].pos[2] -= 2 * 50;	
+    if(obstacle2[i].pos[2]>cameraz)
+    {
+        obstacle2[i].collision = 0;
+        obstacle2[i].pos[2] -= 2 * 50;	
+    }
+}
+
+// Update coins
+for(i=0;i<12;i++)
+{
+    if(coins[i].pos[2]>cameraz)
+        coins[i].pos[2] -= 2 * 50;
+}
+
+// Update player position
+hands.pos[2] -= speed;
+head.pos[2] -= speed;
+body.pos[2] -= speed;
+jeans.pos[2] -= speed;
+
+// Update chaser (police) if active
+if(policetime>0)
+{
+    handschaser.pos[2] -= speed;
+    headchaser.pos[2] -= speed;
+    bodychaser.pos[2] -= speed;
+    jeanschaser.pos[2] -= speed;
+    doghead.pos[2] -= speed;
+    doglegs.pos[2] -= speed;
+    dogbody.pos[2] -= speed;
+    policetime -= 0.03;
+}
+else
+{
+    speed = 0.15;
+}
+
+// Update power-ups
+if(jetpack.pos[2]>cameraz)
+    jetpack.pos[2] -= 2*50;
+
+if(boots.pos[2]>cameraz)
+    boots.pos[2] -= 2*50;
+}
+
+// Game over function
+function playerdead(){
+    document.getElementById('music').pause();
+    document.getElementById('stumble').play();
+    alert("Game over!! Score = ".concat(score.toString()));
+}
+
+// Keyboard input handler
+function checkkeypress(){
+    window.addEventListener("keydown", function (event) {
+        if (event.defaultPrevented) {
+            return;
+        }
+
+        switch (event.key) {
+            case "ArrowLeft":
+            case "a":
+            case "A":
+                if(hands.pos[0] != -2){
+                    hands.pos[0] -= 2;
+                    head.pos[0] -= 2;
+                    body.pos[0] -= 2;
+                    jeans.pos[0] -= 2;
+                    jeanschaser.pos[0] = jeans.pos[0];
+                    headchaser.pos[0] = head.pos[0];
+                    bodychaser.pos[0] = body.pos[0];
+                    handschaser.pos[0] = hands.pos[0];
+                    doglegs.pos[0] = hands.pos[0];
+                    dogbody.pos[0] = hands.pos[0];
+                    doghead.pos[0] = hands.pos[0];
+                }
+                else if(policetime <=0  && hands.pos[1]==0 && speedpowertime<=0)
+                {
+                    jeanschaser.pos[2] = jeans.pos[2] + 1.9;
+                    headchaser.pos[2] = head.pos[2] + 1.9;
+                    bodychaser.pos[2] = body.pos[2] + 1.9;
+                    handchaser.pos[2] = hands.pos[2] + 1.9;
+                    doglegs.pos[2] = hands.pos[2] + 1.9;
+                    dogbody.pos[2] = hands.pos[2] + 1.9;
+                    doghead.pos[2] = hands.pos[2] + 1.9;
+                }
+                break;
+        }
+    });
+}
